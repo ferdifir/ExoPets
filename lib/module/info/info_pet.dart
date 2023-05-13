@@ -1,3 +1,4 @@
+import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -242,6 +243,12 @@ class _InfoPetState extends State<InfoPet> {
                 ),
                 const SizedBox(height: 10),
                 ListTile(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      Routes.PROFILE
+                    );
+                  },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),

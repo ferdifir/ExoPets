@@ -1,6 +1,7 @@
 import 'package:exopets/module/auth/forgot_password.dart';
 import 'package:exopets/module/auth/register_page.dart';
 import 'package:exopets/module/dashboard/dashboard_page.dart';
+import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -139,11 +140,9 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
+                          Navigator.pushReplacementNamed(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => const DashboardPage(),
-                            ),
+                            Routes.DASHBOARD,
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -170,11 +169,9 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(width: 5),
                       InkWell(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushNamed(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => const RegisterPage(),
-                            ),
+                            Routes.REGISTER,
                           );
                         },
                         child: const Text(

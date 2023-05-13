@@ -1,22 +1,25 @@
 import 'package:exopets/module/auth/login_page.dart';
+import 'package:exopets/routes/app_pages.dart';
+import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ExoPetsApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ExoPetsApp extends StatelessWidget {
+  const ExoPetsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'ExoPets',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(),
+      initialRoute: Routes.LOGIN,
+      routes: Pages.pages,
     );
   }
 }
