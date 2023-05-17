@@ -1,3 +1,4 @@
+import 'package:exopets/common/widget/custome_back_button.dart';
 import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -51,18 +52,7 @@ class _InfoPetState extends State<InfoPet> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: Colors.white,
-                              ),
-                              child: IconButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                icon: const Icon(Icons.arrow_back),
-                              ),
-                            ),
+                            const CustomBackButton(),
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),

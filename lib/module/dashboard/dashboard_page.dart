@@ -1,4 +1,4 @@
-import 'package:exopets/module/dashboard/widget/pet_list.dart';
+import 'package:exopets/common/widget/pet_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';

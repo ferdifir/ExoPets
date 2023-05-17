@@ -21,4 +21,7 @@ class Routes {
   static const String STORE = '/store';
   static const String ADD_PRODUCT = '/add-product';
   static const String SEARCH = '/search';
+  static const String ADMIN = '/admin';
+  static const String PRIVACY_POLICY = '/privacy-policy';
+  static const String TERMS_CONDITIONS = '/terms-conditions';
 }
