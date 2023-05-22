@@ -1,9 +1,13 @@
+import 'package:exopets/module/checkout/checkout_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class OrderSummary extends StatelessWidget {
-  const OrderSummary({
+  OrderSummary({
     Key? key,
   }) : super(key: key);
+
+  final CheckoutController checkoutController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +32,7 @@ class OrderSummary extends StatelessWidget {
           ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 3,
+              itemCount: checkoutController.cart.length,
               itemBuilder: (context, index) {
                 return Container(
                   margin: const EdgeInsets.only(bottom: 16),
@@ -45,28 +49,35 @@ class OrderSummary extends StatelessWidget {
                       const SizedBox(width: 16),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text('Cat Food'),
-                          SizedBox(height: 8),
-                          Text('Rp 100.000'),
+                        children: [
+                          Text(checkoutController.cart[index].title),
+                          const SizedBox(height: 8),
+                          Text('Rp ${checkoutController.cart[index].price}.000'),
                         ],
                       ),
                       const Spacer(),
-                      const Text('x1'),
                     ],
                   ),
                 );
               }),
           const SizedBox(height: 16),
           Row(
-            children: const [
-              Text('Total'),
-              Spacer(),
-              Text('Rp 300.000'),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Total'),
+              Text("Rp ${total().toString()}.000"),
             ],
           ),
         ],
       ),
     );
+  }
+
+  total() {
+    int total = 0;
+    for (var item in checkoutController.cart) {
+      total += item.price;
+    }
+    return total;
   }
 }

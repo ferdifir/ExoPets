@@ -14,7 +14,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   @override
   void initState() {
     super.initState();
-    _controller.loadFile('assets/html/privacy_policy.htm');
+    _controller.loadFlutterAsset('assets/html/privacy_policy.htm');
   }
 
   @override

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -37,7 +35,7 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 150,
               backgroundImage: NetworkImage(
                 'https://images.unsplash.com/photo-1612833609248-5e6a5e8b9b0f?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGV0ZXJib3J8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80',
@@ -63,15 +61,15 @@ class ProfilePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Column(
-                  children: [
-                    const Text(
+                  children: const [
+                    Text(
                       '12',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const Text(
+                    Text(
                       'Products',
                       style: TextStyle(
                         fontSize: 16,
@@ -81,15 +79,15 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
                 Column(
-                  children: [
-                    const Text(
+                  children: const [
+                    Text(
                       '12',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const Text(
+                    Text(
                       'Followers',
                       style: TextStyle(
                         fontSize: 16,
@@ -99,15 +97,15 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
                 Column(
-                  children: [
-                    const Text(
+                  children: const [
+                    Text(
                       '12',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const Text(
+                    Text(
                       'Following',
                       style: TextStyle(
                         fontSize: 16,
@@ -124,23 +122,23 @@ class ProfilePage extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {},
-                  child: const Text('Follow'),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.blue,
+                    backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
+                  child: const Text('Follow'),
                 ),
                 ElevatedButton(
                   onPressed: () {},
-                  child: const Text('Message'),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.grey[300],
+                    backgroundColor: Colors.grey[300],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
+                  child: const Text('Message'),
                 ),
               ],
             ),

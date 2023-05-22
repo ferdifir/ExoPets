@@ -1,4 +1,3 @@
-import 'package:exopets/common/widget/pet_list.dart';
 import 'package:flutter/material.dart';
 
 class WishlistPage extends StatelessWidget {
@@ -17,7 +16,7 @@ class WishlistPage extends StatelessWidget {
       backgroundColor: Colors.grey[200],
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
-        child: PetList(),
+        //child: PetList(),
       ),
     );
   }

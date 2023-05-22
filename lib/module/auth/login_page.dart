@@ -1,10 +1,8 @@
+import 'package:exopets/module/auth/auth_controller.dart';
 import 'package:exopets/module/auth/forgot_password.dart';
-import 'package:exopets/module/auth/register_page.dart';
-import 'package:exopets/module/dashboard/dashboard_page.dart';
 import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,7 +13,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isPasswordVisible = false;
-  bool isRememberMe = false;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final AuthController authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -47,8 +47,9 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 30),
                   const Text('Email'),
                   const SizedBox(height: 4),
-                  const TextField(
-                    decoration: InputDecoration(
+                  TextField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
                       hintText: 'e.g. ferdifir.dev@gmail.com',
                       fillColor: Colors.white,
                       prefixIcon: Icon(Icons.email),
@@ -63,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                   const Text('Password'),
                   const SizedBox(height: 4),
                   TextField(
+                    controller: passwordController,
                     obscureText: !isPasswordVisible,
                     decoration: InputDecoration(
                       hintText: '* * * * * * * *',
@@ -110,40 +112,45 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Checkbox(
-                        value: isRememberMe,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value != null) {
-                              isRememberMe = value;
-                            }
-                          });
-                        },
-                      ),
-                      const Text(
-                        'Remember Me',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   Hero(
                     tag: 'auth_button',
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                            context,
-                            Routes.DASHBOARD,
+                        onPressed: () async {
+                          showDialog(
+                            context: context,
+                            builder: (context) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            barrierDismissible: false,
                           );
+                          String? result = await authController.signIn(
+                            emailController.text,
+                            passwordController.text,
+                          );
+                          if (result == null) {
+                            Get.back();
+                            Get.offAllNamed(Routes.DASHBOARD);
+                          } else {
+                            Get.back();
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Error'),
+                                content: Text(result),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -169,10 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(width: 5),
                       InkWell(
                         onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.REGISTER,
-                          );
+                          Get.toNamed(Routes.REGISTER);
                         },
                         child: const Text(
                           'Register',

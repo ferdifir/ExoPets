@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 class Routes {
+  static const String SPLASH = '/splash';
   static const String DASHBOARD = '/dashboard';
   static const String LOGIN = '/login';
   static const String REGISTER = '/register';
@@ -13,12 +14,14 @@ class Routes {
   static const String ADD_PET = '/add-pet';
   static const String EDIT_PET = '/edit-pet';
   static const String CHECKOUT = '/checkout';
+  static const String CART = '/cart';
   static const String WISHLIST = '/wishlist';
   static const String TRANSACTION = '/transaction';
   static const String NOTIFICATION = '/notification';
   static const String CHAT = '/chat';
   static const String CHAT_DETAIL = '/chat-detail';
   static const String STORE = '/store';
+  static const String CREATE_STORE = '/create-store';
   static const String ADD_PRODUCT = '/add-product';
   static const String SEARCH = '/search';
   static const String ADMIN = '/admin';

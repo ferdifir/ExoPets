@@ -1,5 +1,8 @@
 import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../dashboard_controller.dart';
 
 class DashboardHeader extends StatelessWidget {
   DashboardHeader({
@@ -7,6 +10,7 @@ class DashboardHeader extends StatelessWidget {
   }) : super(key: key);
 
   bool isAdmin = true;
+  final DashboardController dashboardController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -31,35 +35,36 @@ class DashboardHeader extends StatelessWidget {
               Row(
                 children: [
                   const SizedBox(width: 16),
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 35,
                     backgroundImage: NetworkImage(
-                      'https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782__340.jpg',
+                      dashboardController.userProfile!.profilePicture ??
+                          'https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782__340.jpg',
                     ),
                   ),
                   const SizedBox(width: 16),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
-                        'John Doe',
-                        style: TextStyle(
+                        dashboardController.userProfile!.name,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        'johndoe@gmail.com',
-                        style: TextStyle(
+                        dashboardController.userProfile!.email,
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        '+62 812-3456-7890',
-                        style: TextStyle(
+                        dashboardController.userProfile!.phone,
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),
@@ -70,11 +75,7 @@ class DashboardHeader extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Settings'),
-                    ),
-                  );
+                  Navigator.pushNamed(context, Routes.EDIT_PROFILE);
                 },
                 icon: const Icon(
                   Icons.settings,
@@ -84,44 +85,47 @@ class DashboardHeader extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          isAdmin ? Row(
-            children: [
-              buildRouteToStore(context),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, Routes.ADMIN);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  margin: const EdgeInsets.only(left: 8, right: 16),
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.admin_panel_settings,
-                            size: 16,
-                          ),
-                          SizedBox(width: 8),
-                          Text('Admin Page'),
-                        ],
+          isAdmin
+              ? Row(
+                  children: [
+                    buildRouteToStore(context),
+                    InkWell(
+                      onTap: () {
+                        // Navigator.pop(context);
+                        // Navigator.pushNamed(context, Routes.ADMIN);
+                        dashboardController.getMyStore();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        margin: const EdgeInsets.only(left: 8, right: 16),
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Row(
+                              children: const [
+                                Icon(
+                                  Icons.admin_panel_settings,
+                                  size: 16,
+                                ),
+                                SizedBox(width: 8),
+                                Text('Admin Page'),
+                              ],
+                            ),
+                            const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                            )
+                          ],
+                        ),
                       ),
-                      const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 16,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ) : buildRouteToStore(context),
+                    ),
+                  ],
+                )
+              : buildRouteToStore(context),
           const SizedBox(height: 6),
         ],
       ),
@@ -132,7 +136,11 @@ class DashboardHeader extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.pop(context);
-        Navigator.pushNamed(context, Routes.STORE);
+        if (dashboardController.store.isNotEmpty) {
+          Navigator.pushNamed(context, Routes.STORE);
+        } else {
+          Navigator.pushNamed(context, Routes.CREATE_STORE);
+        }
       },
       child: Container(
         decoration: BoxDecoration(

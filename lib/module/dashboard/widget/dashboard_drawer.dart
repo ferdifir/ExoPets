@@ -1,11 +1,15 @@
+import 'package:exopets/module/dashboard/dashboard_controller.dart';
 import 'package:exopets/module/dashboard/widget/dashboard_header.dart';
 import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DashboardDrawer extends StatelessWidget {
-  const DashboardDrawer({
+  DashboardDrawer({
     Key? key,
   }) : super(key: key);
+
+  final DashboardController controller = Get.put(DashboardController());
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +34,8 @@ class DashboardDrawer extends StatelessWidget {
             title: const Text('Checkout'),
             leading: const Icon(Icons.shopping_cart),
             onTap: () {
-              Navigator.pushNamed(context, Routes.CHECKOUT);
+              Get.back();
+              Get.toNamed(Routes.CART);
             },
           ),
           ListTile(
@@ -105,7 +110,9 @@ class DashboardDrawer extends StatelessWidget {
                 title: const Text('Logout'),
                 leading: const Icon(Icons.logout),
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, Routes.LOGIN);
+                  controller.logout().then((value) {
+                    Navigator.pushReplacementNamed(context, Routes.LOGIN);
+                  });
                 },
               ),
             ),

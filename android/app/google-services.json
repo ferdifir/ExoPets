@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "618382942308",
+    "project_id": "exopets-b2d6b",
+    "storage_bucket": "exopets-b2d6b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618382942308:android:2098c128330fb92c563f71",
+        "android_client_info": {
+          "package_name": "com.ferdifir.exopets"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "618382942308-pcvikv9on3rqfrjo0mgl4cdhcid3urck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ferdifir.exopets",
+            "certificate_hash": "30b6a1d829354a7ed3c7ed10d762d2c544ed14a9"
+          }
+        },
+        {
+          "client_id": "618382942308-8k4guu6nf1tb5evmress44o5c6q5ikaa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbcRKx9vwuX_zS0APivZpuGgvuVybFSy8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "618382942308-8k4guu6nf1tb5evmress44o5c6q5ikaa.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "618382942308-eetrtm4s9qkgmi55dal7otg3c65p92r8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ferdifir.exopets"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

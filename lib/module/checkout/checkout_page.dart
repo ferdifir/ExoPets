@@ -22,12 +22,12 @@ class CheckoutPage extends StatelessWidget {
       body: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
-          const ShippingAddress(),
-          const OrderSummary(),
+          ShippingAddress(),
+          OrderSummary(),
           // make container for the payment method
-          const PaymentMethod(),
+          PaymentMethod(),
           // make container for the shipping method
-          const ShippingMethod(),
+          ShippingMethod(),
           // make container for the button
           Container(
             margin: const EdgeInsets.all(16),

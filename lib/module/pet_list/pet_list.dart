@@ -1,8 +1,15 @@
+import 'package:exopets/model/products.dart';
 import 'package:exopets/module/info/info_pet.dart';
+import 'package:exopets/module/pet_list/pet_controller.dart';
+import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PetList extends StatelessWidget {
-  const PetList({super.key});
+  PetList({super.key, required this.products});
+
+  final List<Products> products;
+  final PetController petController = Get.put(PetController());
 
   @override
   Widget build(BuildContext context) {
@@ -12,17 +19,13 @@ class PetList extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
-        childAspectRatio: 0.9,
+        childAspectRatio: 0.8,
       ),
+      itemCount: products.length,
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => InfoPet(),
-              ),
-            );
+            Get.to(() => const InfoPet(), arguments: products[index].id);
           },
           child: Container(
             padding: const EdgeInsets.all(10),
@@ -40,31 +43,51 @@ class PetList extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Parkinson',
-                  style: TextStyle(
-                    fontSize: 20,
+                Text(
+                  products[index].name,
+                  style: const TextStyle(
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Rp10.000',
-                      style: TextStyle(
-                        fontSize: 18,
+                    Text(
+                      "Rp ${products[index].price}.000",
+                      style: const TextStyle(
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.amber,
                       ),
                     ),
                     InkWell(
-                      onTap: () {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Berhasil ditambahkan ke keranjang'),
-                        ));
+                      onTap: () async {
+                        bool res =
+                            await petController.addTocart(products[index].id);
+                        if (res) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(
+                            content: Row(
+                              children: [
+                                const Text('Berhasil ditambahkan ke keranjang'),
+                                const Spacer(),
+                                InkWell(
+                                  onTap: () {
+                                    Get.toNamed(Routes.CART);
+                                  },
+                                  child: const Text('Lihat'),
+                                ),
+                              ],
+                            ),
+                          ));
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Gagal ditambahkan ke keranjang'),
+                          ));
+                        }
                       },
                       child: Container(
                         padding: const EdgeInsets.all(4),

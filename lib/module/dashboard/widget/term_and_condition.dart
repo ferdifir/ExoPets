@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class TermAndCondition extends StatefulWidget {
@@ -15,7 +13,7 @@ class _TermAndConditionState extends State<TermAndCondition> {
   @override
   void initState() {
     super.initState();
-    _controller.loadFile('assets/html/term_and_condition.htm');
+    _controller.loadFlutterAsset('assets/html/term_and_condition.htm');
   }
   @override
   Widget build(BuildContext context) {
