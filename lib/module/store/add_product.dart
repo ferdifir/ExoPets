@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:exopets/module/store/store_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AddProductPage extends StatefulWidget {
   const AddProductPage({super.key});
@@ -10,17 +14,25 @@ class AddProductPage extends StatefulWidget {
 class _AddProductPageState extends State<AddProductPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final List<String> categoryChoices = [
-    'Kucing',
-    'Anjing',
-    'Hamster',
-    'Kelinci',
-    'Reptil'
+    'Reptil',
+    'Burung',
+    'Mamalia',
+    'Amfibi',
+    'Ikan',
+    'Serangga',
+    'Primata Kecil',
+    'Mamalia Kecil',
   ];
   final List<String> sexChoices = ['Jantan', 'Betina'];
   final List<String> healthyChoices = ['Sehat', 'Sakit'];
   int selectedCategory = 0;
   int selectedSex = 0;
   int selectedHealthy = 0;
+  final StoreController storeController = Get.find();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +68,24 @@ class _AddProductPageState extends State<AddProductPage> {
                     color: Colors.grey[300],
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Icon(
-                    Icons.image,
-                    color: Colors.grey,
-                    size: 100,
-                  ),
+                  child: Obx(() => InkWell(
+                        onTap: () {
+                          storeController.pickImage();
+                        },
+                        child: storeController.selectedImage.value.isEmpty
+                            ? const Icon(
+                                Icons.image,
+                                color: Colors.grey,
+                                size: 100,
+                              )
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.file(
+                                  File(storeController.selectedImage.value),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                      )),
                 ),
                 const Text(
                   '* klik untuk upload gambar',
@@ -72,10 +97,11 @@ class _AddProductPageState extends State<AddProductPage> {
                 // name
                 const SizedBox(height: 16),
                 TextFormField(
+                  controller: nameController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Nama produk tidak boleh kosong';
+                      return 'Spesies hewan tidak boleh kosong';
                     }
                     return null;
                   },
@@ -83,7 +109,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16)),
                     ),
-                    labelText: 'Nama Produk',
+                    labelText: 'Spesies Hewan',
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -166,6 +192,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 // description
                 const SizedBox(height: 16),
                 TextFormField(
+                  controller: descriptionController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -183,7 +210,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 const SizedBox(height: 4),
                 const Text(
-                  '* deskripsi produk merupakan informasi singkat mengenai hewan yang akan dijual',
+                  '* deskripsi merupakan informasi singkat mengenai hewan yang akan dijual',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
@@ -192,6 +219,8 @@ class _AddProductPageState extends State<AddProductPage> {
                 // price
                 const SizedBox(height: 16),
                 TextFormField(
+                  controller: priceController,
+                  keyboardType: TextInputType.number,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -206,13 +235,22 @@ class _AddProductPageState extends State<AddProductPage> {
                     labelText: 'Harga Produk',
                   ),
                 ),
+                const Text(
+                  '* jika harga produk 100.000 maka masukkan 100',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
                 // stock
                 const SizedBox(height: 16),
                 TextFormField(
+                  controller: ageController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                  keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Stok produk tidak boleh kosong';
+                      return 'Umur hewan tidak boleh kosong';
                     }
                     return null;
                   },
@@ -220,34 +258,76 @@ class _AddProductPageState extends State<AddProductPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16)),
                     ),
-                    labelText: 'Stok Produk',
+                    labelText: 'Umur Hewan',
+                  ),
+                ),
+                const Text(
+                  '* umur hewan dalam bulan',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
                   ),
                 ),
                 // button submit
                 const SizedBox(height: 16),
                 // button submit
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (formKey.currentState!.validate()) {
+                      Get.dialog(const Center(
+                        child: CircularProgressIndicator(),
+                      ));
                       // do something
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Perhatian'),
-                            content: const Text('Produk berhasil ditambahkan'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
+                      String? res = await storeController.uploadProduct(
+                        species: nameController.text,
+                        category: categoryChoices[selectedCategory],
+                        age: ageController.text,
+                        health: healthyChoices[selectedHealthy],
+                        sex: sexChoices[selectedSex],
+                        price: priceController.text,
+                        description: descriptionController.text,
                       );
+                      if (res == null) {
+                        Get.back();
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Perhatian'),
+                              content:
+                                  const Text('Produk berhasil ditambahkan'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        Get.back();
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Perhatian'),
+                              content: Text(res),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(

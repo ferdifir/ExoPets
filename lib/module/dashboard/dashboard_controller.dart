@@ -51,7 +51,6 @@ class DashboardController extends GetxController {
       final response = await _dio.get('/stores/store/$uid');
       if (response.statusCode == 200) {
         var result = response.data['data'];
-        printInfo(info: result.toString());
         store = result;
       }
     } catch (e) {
@@ -66,16 +65,12 @@ class DashboardController extends GetxController {
   ) async {
     final uid = _auth.currentUser!.uid;
     try {
-      final response = await _dio.post('/stores/create', data: {
+      await _dio.post('/stores/create', data: {
         "uid": uid,
         "store_name": name,
         "address": address,
         "description": description,
       });
-      if (response.statusCode == 201) {
-        var result = response.data['data'];
-        printInfo(info: result.toString());
-      }
       return null;
     } catch (e) {
       printError(info: e.toString());
@@ -94,7 +89,7 @@ class DashboardController extends GetxController {
       profilePicture.value = await uploadPictureToStorage(file);
       update();
     } else {
-      Get.snackbar('Error', 'Pilih file PDF terlebih dahulu');
+      Get.snackbar('Error', 'Pilih file Gambar terlebih dahulu');
     }
   }
 
@@ -206,6 +201,7 @@ class DashboardController extends GetxController {
       final response = await _dio.get('/products/product/$uid');
       if (response.statusCode == 200) {
         var result = response.data['data'];
+        print(result);
         products = List<Products>.from(
           result.map((json) => Products.fromJson(json)),
         );

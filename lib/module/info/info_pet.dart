@@ -12,7 +12,6 @@ class InfoPet extends StatefulWidget {
 }
 
 class _InfoPetState extends State<InfoPet> {
-  bool isFavorite = false;
   final controller = Get.put(InfoPetController());
 
   @override
@@ -42,13 +41,14 @@ class _InfoPetState extends State<InfoPet> {
                           children: [
                             Positioned.fill(
                               child: Container(
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
                                     Radius.circular(20),
                                   ),
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                      'https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782__340.jpg',
+                                      controller.pet['image'] ??
+                                          'https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782__340.jpg',
                                     ),
                                     fit: BoxFit.cover,
                                   ),
@@ -64,25 +64,30 @@ class _InfoPetState extends State<InfoPet> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   const CustomBackButton(),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(36),
-                                      color: Colors.white,
-                                    ),
-                                    child: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          isFavorite = !isFavorite;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        isFavorite
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  )
+                                  controller.isFromAdmin
+                                      ? Container()
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(36),
+                                            color: Colors.white,
+                                          ),
+                                          child: IconButton(
+                                            onPressed: () {
+                                              if (_.isWishlist) {
+                                                _.removeFromWishlist();
+                                              } else {
+                                                _.addToWishlist();
+                                              }
+                                            },
+                                            icon: Icon(
+                                              _.isWishlist
+                                                  ? Icons.favorite
+                                                  : Icons.favorite_border,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        )
                                 ],
                               ),
                             )
@@ -107,7 +112,8 @@ class _InfoPetState extends State<InfoPet> {
                                 Icons.location_on,
                                 size: 16,
                               ),
-                              Text('${controller.distance.toStringAsFixed(2)} km')
+                              Text(
+                                  '${controller.distance.toStringAsFixed(2)} km')
                             ],
                           )
                         ],
@@ -245,7 +251,10 @@ class _InfoPetState extends State<InfoPet> {
                       const SizedBox(height: 10),
                       ListTile(
                         onTap: () {
-                          Navigator.pushNamed(context, Routes.PROFILE);
+                          Get.toNamed(
+                            Routes.STORE,
+                            arguments: controller.pet['uid'],
+                          );
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -302,19 +311,39 @@ class _InfoPetState extends State<InfoPet> {
             ),
           ),
         ),
-        floatingActionButton: MaterialButton(
-          onPressed: () {},
-          color: Colors.blue,
-          minWidth: size.width * 0.9,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: const Text(
-            'Make Offer',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
+        floatingActionButton: controller.isFromAdmin
+            ? Container()
+            : MaterialButton(
+                onPressed: () async {
+                  controller.addTocart().then((response) {
+                    if (response) {
+                      Get.snackbar(
+                        'Berhasil',
+                        'Berhasil menambahkan ke keranjang',
+                        backgroundColor: Colors.green,
+                        colorText: Colors.white,
+                      );
+                    } else {
+                      Get.snackbar(
+                        'Gagal',
+                        'Gagal menambahkan ke keranjang',
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                    }
+                  });
+                },
+                color: Colors.blue,
+                minWidth: size.width * 0.9,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: const Text(
+                  'Tambahkan ke keranjang',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );

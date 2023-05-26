@@ -1,9 +1,11 @@
 class Products {
   final int id;
-  final String image;
-  final String name;
-  final String category;
-  final int price;
+  String? image;
+  String? name;
+  String? category;
+  int price;
+  int? isApproved;
+  String? createdAt;
 
   Products({
     required this.id,
@@ -11,6 +13,8 @@ class Products {
     required this.name,
     required this.category,
     required this.price,
+    this.isApproved,
+    this.createdAt,
   });
 
   factory Products.fromJson(Map<String, dynamic> json) {
@@ -20,6 +24,8 @@ class Products {
       name: json['product_name'],
       category: json['category'],
       price: json['price'],
+      isApproved: json['is_approved'],
+      createdAt: json['created_at'],
     );
   }
 }

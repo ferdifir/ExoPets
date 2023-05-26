@@ -1,12 +1,16 @@
+import 'package:exopets/module/checkout/checkout_controller.dart';
+import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'widget/order_summary.dart';
 import 'widget/payment_method.dart';
 import 'widget/shipping_address.dart';
-import 'widget/shipping_method.dart';
 
 class CheckoutPage extends StatelessWidget {
-  const CheckoutPage({super.key});
+  CheckoutPage({super.key});
+
+  final CheckoutController checkoutController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +28,46 @@ class CheckoutPage extends StatelessWidget {
         children: [
           ShippingAddress(),
           OrderSummary(),
-          // make container for the payment method
           PaymentMethod(),
-          // make container for the shipping method
-          ShippingMethod(),
-          // make container for the button
+          //ShippingMethod(),
           Container(
             margin: const EdgeInsets.all(16),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  bool res = await checkoutController.addToTransaction(
+                    checkoutController.cart[0].id,
+                    1,
+                    checkoutController.cart[0].price,
+                  );
+                  if (res) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Success'),
+                          content: const Text('Order placed successfully'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Get.offAllNamed(Routes.DASHBOARD);
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    Get.snackbar(
+                      'Error',
+                      'Failed to place order',
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(

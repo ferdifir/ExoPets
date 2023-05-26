@@ -44,6 +44,11 @@ class OrderSummary extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(16),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                checkoutController.cart[index].image),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 16),

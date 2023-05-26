@@ -79,4 +79,30 @@ class AuthController extends GetxController {
   forgotPassword(String email) async {
     return await _auth.sendPasswordResetEmail(email: email);
   }
+
+  Future<String?> adminLogin(String email, String password) async {
+    try {
+      final response = await _dio.post('/admins/login', data: {
+        "email": email,
+        "password": password,
+      });
+      if (response.statusCode == 200) {
+        await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        return null;
+      } else {
+        return 'Something went wrong.';
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        return 'Wrong password provided for that user.';
+      } else {
+        return 'Something went wrong.';
+      }
+    }
+  }
 }

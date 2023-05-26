@@ -1,5 +1,6 @@
 import 'package:exopets/module/pet_list/pet_list.dart';
 import 'package:exopets/model/products.dart';
+import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -52,13 +53,69 @@ class DashboardPage extends StatelessWidget {
               );
             } else {
               return Scaffold(
-                appBar: buildAppBar(_),
                 drawer: DashboardDrawer(),
                 backgroundColor: Colors.grey[200],
-                body: buildBody(context),
+                body: NestedScrollView(
+                  headerSliverBuilder:
+                      (BuildContext context, bool innerBoxIsScrolled) {
+                    return <Widget>[
+                      SliverAppBar(
+                        backgroundColor: Colors.grey[200],
+                        foregroundColor: Colors.black,
+                        elevation: 0,
+                        title: InkWell(
+                          onTap: () {
+                            dashboardController.getLocation();
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Icon(Icons.location_on),
+                              const SizedBox(width: 8),
+                              Obx(() =>
+                                  Text(dashboardController.cityName.value)),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.keyboard_arrow_down),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.grey[300],
+                            backgroundImage: NetworkImage(
+                              _.userProfile!.profilePicture ??
+                                  'https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782__340.jpg',
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                        ],
+                        floating: true,
+                        pinned: true,
+                        snap: true,
+                        expandedHeight: 250.0,
+                        flexibleSpace: buildSpaceBar(context),
+                      ),
+                    ];
+                  },
+                  body: buildBody(context),
+                ),
               );
             }
           },
+        ),
+      ),
+    );
+  }
+
+  FlexibleSpaceBar buildSpaceBar(BuildContext context) {
+    return FlexibleSpaceBar(
+      collapseMode: CollapseMode.pin,
+      background: Container(
+        color: Colors.grey[200],
+        child: Image.network(
+          'https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782__340.jpg',
+          fit: BoxFit.cover,
         ),
       ),
     );
@@ -72,47 +129,23 @@ class DashboardPage extends StatelessWidget {
         children: [
           const SizedBox(height: 16),
           Text(
-            'Find your new pet',
+            'Temukan Teman Barumu Disini',
             style: Theme.of(context).textTheme.headline5,
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            height: 50,
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                      fillColor: Colors.white,
-                      prefixIcon: Icon(Icons.search),
-                      hintText: 'Search',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(16),
-                        ),
-                      ),
-                    ),
-                  ),
+          TextFormField(
+            onTap: () => Get.toNamed(Routes.SEARCH),
+            readOnly: true,
+            decoration: const InputDecoration(
+              fillColor: Colors.white,
+              prefixIcon: Icon(Icons.search),
+              hintText: 'Cari hewan peliharaan yang kamu inginkan',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16),
                 ),
-                const SizedBox(width: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.filter_list),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Categories',
-            style: Theme.of(context).textTheme.headline6,
           ),
           const SizedBox(height: 16),
           Expanded(
@@ -166,7 +199,9 @@ class DashboardPage extends StatelessWidget {
   }
 
   List<Products> filterList(String category) {
-    return dashboardController.products.where((element) => element.category == category).toList();
+    return dashboardController.products
+        .where((element) => element.category == category)
+        .toList();
   }
 
   AppBar buildAppBar(DashboardController _) {

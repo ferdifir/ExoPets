@@ -26,6 +26,7 @@ class ExoPetsApp extends StatelessWidget {
       ),
       home: const SplashScreen(),
       getPages: Pages.pages,
+      defaultTransition: Transition.cupertinoDialog,
     );
   }
 }

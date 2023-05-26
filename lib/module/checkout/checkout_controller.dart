@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CheckoutController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));
-  String selectedPaymentMethod = 'Credit Card';
+  String selectedPaymentMethod = 'Cash on Delivery';
   String selectedShippingMethod = 'Standard Delivery';
   List<Cart> cart = [];
   List<Address> address = [];
@@ -44,6 +44,39 @@ class CheckoutController extends GetxController {
   selectAddress(Address address) {
     selectedAddress = address;
     update();
+  }
+
+  addToTransaction(
+    int productId,
+    int quantity,
+    int totalAmount,
+  ) async {
+    try {
+      final User user = _auth.currentUser!;
+      final String uid = user.uid;
+      final response = await _dio.post('/transactions/transaction', data: {
+        'uid': uid,
+        'product_id': productId,
+        'quantity': quantity,
+        'total_amount': totalAmount,
+        'status': selectedPaymentMethod == 'Cash on Delivery'
+            ? 'Processing'
+            : 'Awaiting Payment',
+        'payment_method': selectedPaymentMethod,
+        'shipping_address_id': selectedAddress!.id,
+      });
+      if (response.statusCode == 200) {
+        for (var element in cart) {
+          deleteFromCart(element.id);
+        }
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      printInfo(info: 'Error: $e');
+      return false;
+    }
   }
 
   deleteAddress(int id) async {
@@ -191,5 +224,4 @@ class CheckoutController extends GetxController {
       return false;
     }
   }
-  
 }

@@ -6,16 +6,102 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InfoPetController extends GetxController {
-  final int id = Get.arguments;
+  final int id = Get.arguments['id'];
+  final bool isFromAdmin = Get.arguments['isFromAdmin'];
   final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));
   Map<String, dynamic> pet = {};
   final FirebaseAuth _auth = FirebaseAuth.instance;
   double distance = 0.0;
+  List wishlist = [];
+  bool isWishlist = false;
 
   @override
   void onInit() async {
     super.onInit();
     getPet();
+    getWishlist();
+  }
+
+  Future<bool> addTocart() async {
+    try {
+      final User user = _auth.currentUser!;
+      final String uid = user.uid;
+      final response = await _dio.post('/carts/cart', data: {
+        'uid': uid,
+        'pid': id,
+      });
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      printError(info: e.toString());
+      return false;
+    }
+  }
+
+  addToWishlist() async {
+    try {
+      final User user = _auth.currentUser!;
+      final String uid = user.uid;
+      final response = await _dio.post('/wishlists/wishlist', data: {
+        'uid': uid,
+        'pid': id,
+      });
+      if (response.statusCode == 200) {
+        getWishlist();
+      }
+    } catch (e) {
+      printError(info: e.toString());
+    }
+    isWishlist = checkWishlist();
+    update();
+  }
+
+  removeFromWishlist() async {
+    try {
+      final User user = _auth.currentUser!;
+      final String uid = user.uid;
+      final response = await _dio.post('/wishlists/wishlist/delete', data: {
+        'uid': uid,
+        'pid': id,
+      });
+      if (response.statusCode == 200) {
+        getWishlist();
+      }
+    } catch (e) {
+      printError(info: e.toString());
+    }
+    isWishlist = checkWishlist();
+    update();
+  }
+
+  bool checkWishlist() {
+    bool isWishlist = false;
+    for (var item in wishlist) {
+      if (item['product_id'] == id) {
+        isWishlist = true;
+        break;
+      }
+    }
+    return isWishlist;
+  }
+
+  getWishlist() async {
+    final uid = _auth.currentUser!.uid;
+    try {
+      final response = await _dio.get('/wishlists/wishlist/$uid');
+      if (response.statusCode == 200) {
+        var result = response.data['data'];
+        wishlist = result;
+        printInfo(info: wishlist.toString());
+      }
+    } catch (e) {
+      printError(info: e.toString());
+    }
+    isWishlist = checkWishlist();
+    update();
   }
 
   getPet() async {
@@ -26,8 +112,8 @@ class InfoPetController extends GetxController {
         var result = response.data['data'];
         printInfo(info: result.toString());
         pet = result;
-        distance =
-            await calculateDistance(result['address']['x'], result['address']['y']);
+        distance = await calculateDistance(
+            result['address']['x'], result['address']['y']);
         update();
       }
     } catch (e) {

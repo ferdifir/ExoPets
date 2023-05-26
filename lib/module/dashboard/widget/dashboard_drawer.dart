@@ -1,3 +1,4 @@
+import 'package:exopets/module/cs/customer_support.dart';
 import 'package:exopets/module/dashboard/dashboard_controller.dart';
 import 'package:exopets/module/dashboard/widget/dashboard_header.dart';
 import 'package:exopets/routes/app_routes.dart';
@@ -42,14 +43,16 @@ class DashboardDrawer extends StatelessWidget {
             title: const Text('Wishlist'),
             leading: const Icon(Icons.favorite),
             onTap: () {
-              Navigator.pushNamed(context, Routes.WISHLIST);
+              Get.back();
+              Get.toNamed(Routes.WISHLIST);
             },
           ),
           ListTile(
             title: const Text('Transaction'),
             leading: const Icon(Icons.list),
             onTap: () {
-              Navigator.pushNamed(context, Routes.TRANSACTION);
+              Get.back();
+              Get.toNamed(Routes.TRANSACTION);
             },
           ),
           Container(
@@ -67,12 +70,16 @@ class DashboardDrawer extends StatelessWidget {
           ListTile(
             title: const Text('Customer Support'),
             leading: const Icon(Icons.support_agent),
-            onTap: () {},
+            onTap: () {
+              Get.back();
+              Get.to(() => CustomerSupport());
+            },
           ),
           ListTile(
             title: const Text('Privacy Policy'),
             leading: const Icon(Icons.privacy_tip),
             onTap: () {
+              Get.back();
               Navigator.pushNamed(context, Routes.PRIVACY_POLICY);
             },
           ),
@@ -80,6 +87,7 @@ class DashboardDrawer extends StatelessWidget {
             title: const Text('Terms & Conditions'),
             leading: const Icon(Icons.description),
             onTap: () {
+              Get.back();
               Navigator.pushNamed(context, Routes.TERMS_CONDITIONS);
             },
           ),
@@ -110,9 +118,35 @@ class DashboardDrawer extends StatelessWidget {
                 title: const Text('Logout'),
                 leading: const Icon(Icons.logout),
                 onTap: () {
-                  controller.logout().then((value) {
-                    Navigator.pushReplacementNamed(context, Routes.LOGIN);
-                  });
+                  Get.back();
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        title: const Text('Logout'),
+                        content: const Text('Are you sure want to logout?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              controller.logout().then((value) {
+                                Get.offAllNamed(Routes.LOGIN);
+                              });
+                            },
+                            child: const Text('Logout'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
               ),
             ),
@@ -122,4 +156,3 @@ class DashboardDrawer extends StatelessWidget {
     );
   }
 }
-

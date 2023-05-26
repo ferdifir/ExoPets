@@ -55,18 +55,18 @@ class PaymentMethod extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
-                          ListTile(
-                            leading: const Icon(Icons.credit_card),
-                            title: const Text('Credit Card'),
-                            onTap: () {
-                              checkoutController
-                                  .selectPaymentMethod('Credit Card');
-                              Navigator.pop(context);
-                            },
-                            trailing: isSelected('Credit Card')
-                                ? const Icon(Icons.check)
-                                : null,
-                          ),
+                          // ListTile(
+                          //   leading: const Icon(Icons.credit_card),
+                          //   title: const Text('Credit Card'),
+                          //   onTap: () {
+                          //     checkoutController
+                          //         .selectPaymentMethod('Credit Card');
+                          //     Navigator.pop(context);
+                          //   },
+                          //   trailing: isSelected('Credit Card')
+                          //       ? const Icon(Icons.check)
+                          //       : null,
+                          // ),
                           ListTile(
                             leading: const Icon(Icons.credit_card),
                             title: const Text('Bank Transfer'),
@@ -111,6 +111,7 @@ class PaymentMethod extends StatelessWidget {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(16),
                       ),
+                      child: const Icon(Icons.credit_card),
                     ),
                     const SizedBox(width: 16),
                     Text(checkoutController.selectedPaymentMethod),

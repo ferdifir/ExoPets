@@ -75,7 +75,15 @@ class DashboardHeader extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, Routes.EDIT_PROFILE);
+                  Navigator.pushNamed(
+                    context,
+                    Routes.EDIT_PROFILE,
+                    arguments: {
+                      'name': dashboardController.userProfile!.name,
+                      'email': dashboardController.userProfile!.email,
+                      'phone': dashboardController.userProfile!.phone,
+                    },
+                  );
                 },
                 icon: const Icon(
                   Icons.settings,
@@ -85,47 +93,7 @@ class DashboardHeader extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          isAdmin
-              ? Row(
-                  children: [
-                    buildRouteToStore(context),
-                    InkWell(
-                      onTap: () {
-                        // Navigator.pop(context);
-                        // Navigator.pushNamed(context, Routes.ADMIN);
-                        dashboardController.getMyStore();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        margin: const EdgeInsets.only(left: 8, right: 16),
-                        padding: const EdgeInsets.all(12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Row(
-                              children: const [
-                                Icon(
-                                  Icons.admin_panel_settings,
-                                  size: 16,
-                                ),
-                                SizedBox(width: 8),
-                                Text('Admin Page'),
-                              ],
-                            ),
-                            const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : buildRouteToStore(context),
+          buildRouteToStore(context),
           const SizedBox(height: 6),
         ],
       ),
@@ -134,12 +102,16 @@ class DashboardHeader extends StatelessWidget {
 
   InkWell buildRouteToStore(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.pop(context);
+      onTap: () async {
+        await dashboardController.getProducts();
+        Get.back();
         if (dashboardController.store.isNotEmpty) {
-          Navigator.pushNamed(context, Routes.STORE);
+          Get.toNamed(
+            Routes.STORE,
+            arguments: dashboardController.store['uid'],
+          );
         } else {
-          Navigator.pushNamed(context, Routes.CREATE_STORE);
+          Get.toNamed(Routes.CREATE_STORE);
         }
       },
       child: Container(

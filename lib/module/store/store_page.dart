@@ -1,3 +1,5 @@
+import 'package:exopets/module/info/info_pet.dart';
+import 'package:exopets/module/store/edit_store.dart';
 import 'package:exopets/module/store/store_controller.dart';
 import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ class StorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool state = storeController.uid == storeController.auth.currentUser!.uid;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Toko Saya'),
@@ -18,17 +21,34 @@ class StorePage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios),
         ),
+        actions: [
+          state
+              ? IconButton(
+                  onPressed: () {
+                    storeController.setStore();
+                    Get.to(() => EditStore());
+                  },
+                  icon: const Icon(Icons.settings),
+                )
+              : const SizedBox(),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.notifications),
+          )
+        ],
         elevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
       ),
       backgroundColor: Colors.grey[200],
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, Routes.ADD_PRODUCT);
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: state
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.ADD_PRODUCT);
+              },
+              child: const Icon(Icons.add),
+            )
+          : null,
       body: GetBuilder<StoreController>(
         init: StoreController(),
         initState: (_) {},
@@ -106,17 +126,17 @@ class StorePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
-                      children: const [
+                      children: [
                         Text(
-                          '0',
-                          style: TextStyle(
+                          _.products.length.toString(),
+                          style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                           ),
                         ),
-                        SizedBox(height: 4),
-                        Text(
+                        const SizedBox(height: 4),
+                        const Text(
                           'Produk',
                           style: TextStyle(
                             color: Colors.black,
@@ -125,17 +145,17 @@ class StorePage extends StatelessWidget {
                       ],
                     ),
                     Column(
-                      children: const [
+                      children: [
                         Text(
-                          '0',
-                          style: TextStyle(
+                          _.transaction.length.toString(),
+                          style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                           ),
                         ),
-                        SizedBox(height: 4),
-                        Text(
+                        const SizedBox(height: 4),
+                        const Text(
                           'Transaksi',
                           style: TextStyle(
                             color: Colors.black,
@@ -144,17 +164,17 @@ class StorePage extends StatelessWidget {
                       ],
                     ),
                     Column(
-                      children: const [
+                      children: [
                         Text(
-                          '0',
-                          style: TextStyle(
+                          'Rp ${_.transaction.fold(0, (sum, item) => sum + item.total)}.000',
+                          style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                           ),
                         ),
-                        SizedBox(height: 4),
-                        Text(
+                        const SizedBox(height: 4),
+                        const Text(
                           'Penghasilan',
                           style: TextStyle(
                             color: Colors.black,
@@ -178,11 +198,17 @@ class StorePage extends StatelessWidget {
                       crossAxisSpacing: 1,
                       mainAxisSpacing: 1,
                     ),
-                    itemCount: 6,
+                    itemCount: _.products.length,
                     itemBuilder: (context, index) {
-                      return Image.network(
-                        'https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782__340.jpg',
-                        fit: BoxFit.cover,
+                      return InkWell(
+                        onTap: () => Get.to(
+                          () => const InfoPet(),
+                          arguments: _.products[index].id,
+                        ),
+                        child: Image.network(
+                          _.products[index].image!,
+                          fit: BoxFit.cover,
+                        ),
                       );
                     },
                   ),

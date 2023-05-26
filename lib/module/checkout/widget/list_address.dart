@@ -35,6 +35,10 @@ class ListAddress extends StatelessWidget {
                     checkoutController.selectAddress(address);
                     Get.back();
                   },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  tileColor: Colors.white,
                   leading: const Icon(Icons.location_on_outlined),
                   title: Text(address.name!),
                   subtitle: Column(

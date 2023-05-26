@@ -5,10 +5,11 @@ import 'package:exopets/module/auth/register_page.dart';
 import 'package:exopets/module/checkout/cart_page.dart';
 import 'package:exopets/module/checkout/checkout_page.dart';
 import 'package:exopets/module/dashboard/dashboard_page.dart';
-import 'package:exopets/module/dashboard/edit_profile.dart';
+import 'package:exopets/module/profile/edit_profile.dart';
 import 'package:exopets/module/dashboard/widget/privacy_policy.dart';
 import 'package:exopets/module/dashboard/widget/term_and_condition.dart';
 import 'package:exopets/module/profile/profile_page.dart';
+import 'package:exopets/module/search/search_page.dart';
 import 'package:exopets/module/splash/splash_screen.dart';
 import 'package:exopets/module/store/add_product.dart';
 import 'package:exopets/module/store/create_store.dart';
@@ -24,11 +25,11 @@ class Pages {
     GetPage(name: Routes.SPLASH, page: () => const SplashScreen()),
     GetPage(name: Routes.LOGIN, page: () => const LoginPage()),
     GetPage(name: Routes.REGISTER, page: () => RegisterPage()),
-    GetPage(name: Routes.FORGOT_PASSWORD, page: () => const ForgotPasswordPage()),
+    GetPage(name: Routes.FORGOT_PASSWORD, page: () => ForgotPasswordPage()),
     GetPage(name: Routes.DASHBOARD, page: () => DashboardPage()),
-    GetPage(name: Routes.CHECKOUT, page: () => const CheckoutPage()),
-    GetPage(name: Routes.WISHLIST, page: () => const WishlistPage()),
-    GetPage(name: Routes.TRANSACTION, page: () => const TransactionPage()),
+    GetPage(name: Routes.CHECKOUT, page: () => CheckoutPage()),
+    GetPage(name: Routes.WISHLIST, page: () => WishlistPage()),
+    GetPage(name: Routes.TRANSACTION, page: () => TransactionPage()),
     GetPage(name: Routes.PROFILE, page: () => const ProfilePage()),
     GetPage(name: Routes.STORE, page: () => StorePage()),
     GetPage(name: Routes.ADD_PRODUCT, page: () => const AddProductPage()),
@@ -38,5 +39,6 @@ class Pages {
     GetPage(name: Routes.EDIT_PROFILE, page: () => const EditProfile()),
     GetPage(name: Routes.CREATE_STORE, page: () => CreateStore()),
     GetPage(name: Routes.CART, page: () => CartPage()),
+    GetPage(name: Routes.SEARCH, page: () => const SearchPage()),
   ];
 }

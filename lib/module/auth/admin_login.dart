@@ -1,17 +1,17 @@
-import 'package:exopets/module/auth/admin_login.dart';
+import 'package:exopets/module/admin/admin_page.dart';
 import 'package:exopets/module/auth/auth_controller.dart';
 import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class AdminLogin extends StatefulWidget {
+  const AdminLogin({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<AdminLogin> createState() => _AdminLoginState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _AdminLoginState extends State<AdminLogin> {
   bool isPasswordVisible = false;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -33,27 +33,22 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Selamat Datang!',
+                      'Masuk sebagai admin!',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'Silahkan masuk untuk melanjutkan',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey,
                       ),
                     ),
                     const SizedBox(height: 30),
                     const Text('Email'),
                     const SizedBox(height: 4),
                     TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Masukkan email anda terlebih dahulu';
+                        } else if (value.isEmail == false) {
+                          return 'Masukkan email yang valid';
                         }
                         return null;
                       },
@@ -73,6 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                     const Text('Password'),
                     const SizedBox(height: 4),
                     TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Masukkan password anda terlebih dahulu';
@@ -137,13 +133,12 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 barrierDismissible: false,
                               );
-                              String? result = await authController.signIn(
+                              String? result = await authController.adminLogin(
                                 emailController.text,
                                 passwordController.text,
                               );
                               if (result == null) {
-                                Get.back();
-                                Get.offAllNamed(Routes.DASHBOARD);
+                                Get.offAll(() => const AdminPage());
                               } else {
                                 Get.back();
                                 showDialog(
@@ -174,41 +169,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Belum punya akun?',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        InkWell(
-                          onTap: () {
-                            Get.toNamed(Routes.REGISTER);
-                          },
-                          child: const Text(
-                            'Daftar',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
                     Container(
                       width: double.infinity,
                       alignment: Alignment.center,
                       child: TextButton(
                         onPressed: () {
-                          Get.offAll(() => const AdminLogin());
+                          Get.offAllNamed(Routes.LOGIN);
                         },
-                        child: const Text('Masuk sebagai admin'),
+                        child: const Text('Masuk sebagai user'),
                       ),
                     )
                   ],

@@ -1,3 +1,4 @@
+import 'package:exopets/module/admin/admin_page.dart';
 import 'package:exopets/module/splash/splash_controller.dart';
 import 'package:exopets/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      controller.isLogin()
-          ? Get.offAllNamed(Routes.DASHBOARD)
-          : Get.offAllNamed(Routes.LOGIN);
-      controller.dispose();
-      controller.onDelete();
+    Future.delayed(const Duration(seconds: 3), () async {
+      bool isLogin = controller.isLogin();
+      if (isLogin) {
+        if (controller.isAdm) {
+          Get.offAll(() => const AdminPage());
+        } else {
+          Get.offAllNamed(Routes.DASHBOARD);
+        }
+      } else {
+        Get.offAllNamed(Routes.LOGIN);
+      }
     });
   }
 

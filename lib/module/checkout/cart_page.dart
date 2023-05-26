@@ -42,7 +42,10 @@ class CartPage extends StatelessWidget {
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: Image.network(
-                      'https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782__340.jpg',
+                      _.cart[index].image,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   title: Text(_.cart[index].title),
@@ -71,7 +74,16 @@ class CartPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Get.toNamed(Routes.CHECKOUT);
+          if (checkoutController.cart.length > 1) {
+            Get.snackbar(
+              'Error',
+              'Only one item can be purchased at a time',
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+            );
+          } else {
+            Get.toNamed(Routes.CHECKOUT);
+          }
         },
         label: const Text('Checkout'),
         icon: const Icon(Icons.shopping_cart),
