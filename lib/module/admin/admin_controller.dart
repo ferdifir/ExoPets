@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:exopets/common/config/config.dart';
+import 'package:exopets/model/payment.dart';
 import 'package:exopets/model/products.dart';
-import 'package:exopets/model/transaction.dart';
 import 'package:exopets/model/userinfo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -13,15 +13,8 @@ class AdminController extends GetxController {
   final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));
   List<Products> listProduct = [];
   List<UserProfile> listUser = [];
-  List<Transaction> listTransaction = [];
-
-  @override
-  onInit() {
-    super.onInit();
-    Timer.periodic(const Duration(minutes: 1), (timer) {
-      getListProduct();
-    });
-  }
+  List<Payment> listTransaction = [];
+  List listReport = [];
 
   logout() async => await _auth.signOut();
 
@@ -46,7 +39,8 @@ class AdminController extends GetxController {
 
   approveProduct(int id) async {
     try {
-      final response = await _dio.put('/admins/admin/${_auth.currentUser!.uid}/product/$id');
+      final response =
+          await _dio.put('/admins/admin/${_auth.currentUser!.uid}/product/$id');
       if (response.statusCode == 200) {
         printInfo(info: response.data['message']);
         getListProduct();
@@ -60,7 +54,8 @@ class AdminController extends GetxController {
 
   deleteProduct(int id) async {
     try {
-      final response = await _dio.delete('/admins/admin/${_auth.currentUser!.uid}/product/$id');
+      final response = await _dio
+          .delete('/admins/admin/${_auth.currentUser!.uid}/product/$id');
       if (response.statusCode == 200) {
         printInfo(info: response.data['message']);
         getListProduct();
@@ -75,7 +70,8 @@ class AdminController extends GetxController {
   getAllUser() async {
     listUser.clear();
     try {
-      final response = await _dio.get('/admins/admin/${_auth.currentUser!.uid}/user');
+      final response =
+          await _dio.get('/admins/admin/${_auth.currentUser!.uid}/user');
       if (response.statusCode == 200) {
         printInfo(info: response.data['message']);
         final data = response.data['data'];
@@ -106,13 +102,14 @@ class AdminController extends GetxController {
   }
 
   getTransactions() async {
+    listTransaction.clear();
     try {
-      final response = await _dio.get('/admins/admin/${_auth.currentUser!.uid}/transaction');
+      final response = await _dio.get('/transactions/payment');
       if (response.statusCode == 200) {
         printInfo(info: response.data['message']);
         final data = response.data['data'];
         data.forEach((element) {
-          listTransaction.add(Transaction.fromJson(element));
+          listTransaction.add(Payment.fromJson(element));
         });
         update();
       } else {
@@ -120,6 +117,46 @@ class AdminController extends GetxController {
       }
     } catch (e) {
       printInfo(info: e.toString());
+    }
+  }
+
+  updateStatusTransaction(int id) async {
+    try {
+      final response = await _dio.post(
+        '/transactions/transaction/update',
+        data: {
+          "transaction_id": id,
+          "status": "Processing",
+        },
+      );
+      if (response.statusCode == 200) {
+        printInfo(info: response.data['message']);
+        getTransactions();
+      } else {
+        printInfo(info: response.statusMessage!);
+      }
+    } catch (e) {
+      printInfo(info: e.toString());
+    }
+  }
+
+  getReport() async {
+    listReport.clear();
+    try {
+      final response = await _dio.get('/users/report');
+      if (response.statusCode == 200) {
+        printInfo(info: response.data['message']);
+        final data = response.data['data'];
+        data.forEach((element) {
+          listReport.add(element);
+        });
+        print(data);
+        update();
+      } else {
+        printInfo(info: response.statusMessage!);
+      }
+    } catch (e) {
+      printError(info: e.toString());
     }
   }
 }

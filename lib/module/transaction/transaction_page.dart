@@ -1,4 +1,5 @@
 import 'package:exopets/module/transaction/transaction_controller.dart';
+import 'package:exopets/module/transaction/upload_bukti_transfer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -55,9 +56,15 @@ class TransactionPage extends StatelessWidget {
                             ],
                           ),
                           const Spacer(),
-                          transaction.paymentMethod == 'Bank Transfer'
+                          transaction.paymentMethod == 'Bank Transfer' &&
+                                  transaction.status == 'Awaiting Payment'
                               ? ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Get.to(
+                                      () => UploadBuktiTransfer(),
+                                      arguments: transaction.id,
+                                    );
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.green,
                                     shape: RoundedRectangleBorder(

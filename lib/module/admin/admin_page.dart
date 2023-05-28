@@ -84,6 +84,7 @@ class AdminPage extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
+                        controller.getReport();
                         controller.getAllUser().then((_) {
                           Get.to(() => const ManageUsers());
                         });

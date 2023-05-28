@@ -1,3 +1,4 @@
+import 'package:exopets/common/utils/helper.dart';
 import 'package:exopets/module/admin/admin_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,14 +25,14 @@ class ManageUsers extends StatelessWidget {
             TabBar(
               labelColor: Colors.black,
               tabs: [
-                Tab(text: 'Chat'),
+                Tab(text: 'Report'),
                 Tab(text: 'Users'),
               ],
             ),
             Expanded(
               child: TabBarView(
                 children: [
-                  ChatScreen(),
+                  ReportScreen(),
                   UserScreen(),
                 ],
               ),
@@ -88,8 +89,8 @@ class UserScreen extends StatelessWidget {
                         const Spacer(),
                         IconButton(
                           onPressed: () {
-                            controller.deleteUser(
-                                controller.listUser[index].uid);
+                            controller
+                                .deleteUser(controller.listUser[index].uid);
                           },
                           icon: const Icon(Icons.delete),
                         ),
@@ -106,44 +107,42 @@ class UserScreen extends StatelessWidget {
   }
 }
 
-class ChatScreen extends StatelessWidget {
-  const ChatScreen({
+class ReportScreen extends StatelessWidget {
+  const ReportScreen({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              const CircleAvatar(
+    return GetBuilder<AdminController>(
+      init: AdminController(),
+      initState: (_) {},
+      builder: (controller) {
+        return ListView.builder(
+          itemCount: controller.listReport.length,
+          itemBuilder: (context, index) {
+            final report = controller.listReport[index];
+            return ExpansionTile(
+              title: Text(report['name'] ?? 'No Title'),
+              subtitle: Text(getTimeAgo(report['report_date'] ?? 0)),
+              leading: CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(
+                backgroundImage: NetworkImage(report['profile_picture'] ??
                     'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'John Doe',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget aliquam ultricies, nunc nisl ultricies nunc, quis aliquet nisl nisl eu nisl. Donec euismod, nisl eget aliquam ultricies, nunc nisl ultricies nunc, quis aliquet nisl nisl eu nisl.',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+              children: [
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(16),
+                  child: Text(
+                    "Laporan: ${report['report_reason']}",
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            );
+          },
         );
       },
     );

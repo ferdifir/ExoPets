@@ -1,3 +1,4 @@
+import 'package:exopets/model/payment.dart';
 import 'package:exopets/module/admin/admin_controller.dart';
 import 'package:exopets/module/info/info_pet.dart';
 import 'package:flutter/material.dart';
@@ -22,114 +23,196 @@ class ManageOrder extends StatelessWidget {
             elevation: 0,
           ),
           backgroundColor: Colors.grey[200],
-          body: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: controller.listTransaction.length,
-            itemBuilder: (context, index) {
-              final transaction = controller.listTransaction[index];
-              return Container(
-                margin: const EdgeInsets.only(
-                  top: 16,
-                  left: 16,
-                  right: 16,
-                ),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.payments),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.more_vert),
-                        const SizedBox(width: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Order ID: ${transaction.id}'),
-                            Text('Order Date: ${transaction.date.toString().substring(0, 10)}'),
-                          ],
-                        ),
-                        const Spacer(),
-                        ElevatedButton(
-                          onPressed: () {
-                            Get.to(
-                              () => const InfoPet(),
-                              arguments: {
-                                'id': controller.listTransaction[index].productId,
-                                'isFromAdmin': true,
-                              }
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            minimumSize: const Size(100, 40),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                          child: const Text('Detail'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    const Divider(),
-                    const SizedBox(height: 4),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+          body: controller.listTransaction.isEmpty
+              ? const Center(
+                  child: Text('No Transaction'),
+                )
+              : ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: controller.listTransaction.length,
+                  itemBuilder: (context, index) {
+                    final transaction = controller.listTransaction[index];
+                    return Container(
+                      margin: const EdgeInsets.only(
+                        top: 16,
+                        left: 16,
+                        right: 16,
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
                             children: [
-                              Row(
+                              const Icon(Icons.payments),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.more_vert),
+                              const SizedBox(width: 8),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Total: '),
-                                  Text('Rp. ${transaction.total}.000'),
+                                  Text('Order ID: ${transaction.tid}'),
+                                  Text(
+                                      'Order Date: ${transaction.transactionDate.toString().substring(0, 10)}'),
                                 ],
                               ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  const Text('Status: '),
-                                  Text(transaction.status),
-                                ],
+                              const Spacer(),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Get.dialog(
+                                    buildDetailPaymentDialog(
+                                      transaction,
+                                      context,
+                                      controller,
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  minimumSize: const Size(100, 40),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                ),
+                                child: const Text('Detail'),
                               ),
                             ],
                           ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                          const SizedBox(height: 4),
+                          const Divider(),
+                          const SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  const Text('Quantity: '),
-                                  Text(transaction.quantity.toString()),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Text('Total: '),
+                                        Text(
+                                            'Rp. ${transaction.totalAmount}.000'),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        const Text('Status: '),
+                                        Text(transaction.status!),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  const Text('Payment: '),
-                                  Text(transaction.paymentMethod),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Text('Quantity: '),
+                                        Text(transaction.quantity.toString()),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        const Text('Payment: '),
+                                        Text(transaction.paymentMethod!),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
         );
       },
+    );
+  }
+
+  Dialog buildDetailPaymentDialog(
+    Payment transaction,
+    BuildContext context,
+    AdminController controller,
+  ) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 16),
+          Image.network(
+            transaction.bankTransferInfo!,
+            width: 200,
+            fit: BoxFit.cover,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            "Nama Pengirim: ${transaction.senderName!}",
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          const SizedBox(height: 18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              OutlinedButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text('Cancel'),
+              ),
+              transaction.status! != 'Awaiting Payment'
+                  ? Container()
+                  : OutlinedButton(
+                      onPressed: () {
+                        Get.back();
+                        Get.defaultDialog(
+                          title: 'Confirm Payment',
+                          content: const Text(
+                            'Are you sure to confirm this payment?',
+                          ),
+                          textConfirm: 'Confirm',
+                          textCancel: 'Cancel',
+                          onConfirm: () {
+                            Get.back();
+                            controller
+                                .updateStatusTransaction(
+                                    transaction.transactionId!)
+                                .then((value) {
+                              Get.defaultDialog(
+                                title: 'Success',
+                                content: const Text(
+                                  'Payment confirmed!',
+                                ),
+                                textConfirm: 'OK',
+                                onConfirm: () {
+                                  Get.back();
+                                  Get.back();
+                                },
+                              );
+                            });
+                          },
+                        );
+                      },
+                      child: const Text('Confirm'),
+                    ),
+            ],
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
     );
   }
 }
