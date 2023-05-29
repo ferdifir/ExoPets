@@ -32,45 +32,49 @@ class DashboardHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const SizedBox(width: 16),
-                  CircleAvatar(
-                    radius: 35,
-                    backgroundImage: NetworkImage(
-                      dashboardController.userProfile!.profilePicture ??
-                          'https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782__340.jpg',
+              Expanded(
+                child: Row(
+                  children: [
+                    const SizedBox(width: 16),
+                    CircleAvatar(
+                      radius: 35,
+                      backgroundImage: NetworkImage(
+                        dashboardController.userProfile!.profilePicture ??
+                            'https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782__340.jpg',
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        dashboardController.userProfile!.name,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            dashboardController.userProfile!.name,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            dashboardController.userProfile!.email,
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            dashboardController.userProfile!.phone,
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        dashboardController.userProfile!.email,
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        dashboardController.userProfile!.phone,
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
               IconButton(
                 onPressed: () {

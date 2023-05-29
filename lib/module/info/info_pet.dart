@@ -95,26 +95,21 @@ class _InfoPetState extends State<InfoPet> {
                         ),
                       ),
                       const SizedBox(height: 20),
+                      Text(
+                        controller.pet['product_name'],
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(
-                            controller.pet['product_name'],
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          const Icon(
+                            Icons.location_on,
+                            size: 16,
                           ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.location_on,
-                                size: 16,
-                              ),
-                              Text(
-                                  '${controller.distance.toStringAsFixed(2)} km')
-                            ],
+                          Text(
+                            '${controller.distance.toStringAsFixed(2)} km',
                           )
                         ],
                       ),
