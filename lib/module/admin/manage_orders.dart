@@ -1,6 +1,5 @@
 import 'package:exopets/model/payment.dart';
 import 'package:exopets/module/admin/admin_controller.dart';
-import 'package:exopets/module/info/info_pet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:exopets/common/config/config.dart';
 import 'package:exopets/model/payment.dart';
@@ -104,7 +102,8 @@ class AdminController extends GetxController {
   getTransactions() async {
     listTransaction.clear();
     try {
-      final response = await _dio.get('/transactions/payment');
+      final id = _auth.currentUser!.uid;
+      final response = await _dio.get('/admins/admin/$id/transaction');
       if (response.statusCode == 200) {
         printInfo(info: response.data['message']);
         final data = response.data['data'];

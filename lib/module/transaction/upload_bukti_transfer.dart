@@ -9,6 +9,7 @@ class UploadBuktiTransfer extends StatelessWidget {
 
   TextEditingController nameController = TextEditingController();
   int id = Get.arguments;
+  final double heightImage = 400;
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +34,13 @@ class UploadBuktiTransfer extends StatelessWidget {
                 children: <Widget>[
                   Obx(() {
                     return controller.selectedImage.value.isEmpty
-                        ? Image.network(
-                            'https://media.perkakasku.id/image/qrperkakasku.jpeg',
-                            height: 500,
+                        ? Image.asset(
+                            'assets/images/qris.jpeg',
+                            height: heightImage,
                           )
                         : Image.file(
                             File(controller.selectedImage.value),
-                            height: 500,
+                            height: heightImage,
                           );
                   }),
                   const SizedBox(height: 16),

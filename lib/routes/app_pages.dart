@@ -22,7 +22,7 @@ import 'package:get/get.dart';
 
 class Pages {
   static List<GetPage> pages = [
-    GetPage(name: Routes.SPLASH, page: () => const SplashScreen()),
+    GetPage(name: Routes.SPLASH, page: () => SplashScreen()),
     GetPage(name: Routes.LOGIN, page: () => const LoginPage()),
     GetPage(name: Routes.REGISTER, page: () => RegisterPage()),
     GetPage(name: Routes.FORGOT_PASSWORD, page: () => ForgotPasswordPage()),

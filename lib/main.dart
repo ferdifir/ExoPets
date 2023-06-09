@@ -24,7 +24,7 @@ class ExoPetsApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SplashScreen(),
+      home: SplashScreen(),
       getPages: Pages.pages,
       defaultTransition: Transition.cupertinoDialog,
     );
