@@ -8,10 +8,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class StoreController extends GetxController {
   final uid = Get.arguments;
+  int? sid;
   Map<String, dynamic> store = {};
   final FirebaseAuth auth = FirebaseAuth.instance;
   final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));
@@ -25,8 +27,7 @@ class StoreController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    getMyStore();
-    getProducts();
+    getMyStore().then((_) => getProducts());
     getTransaction();
   }
 
@@ -43,6 +44,7 @@ class StoreController extends GetxController {
       final response = await _dio.get('/stores/store/$uid');
       if (response.statusCode == 200) {
         var result = response.data['data'];
+        sid = result['sid'];
         printInfo(info: result.toString());
         store = result;
         update();
@@ -74,14 +76,19 @@ class StoreController extends GetxController {
   getProducts() async {
     String uid = auth.currentUser!.uid;
     try {
-      final response = await _dio.get('/products/product/$uid');
+      final response = await _dio.get('/products/product/$uid/$sid/my');
       if (response.statusCode == 200) {
         var result = response.data['data'];
+        if (kDebugMode) {
+          print(sid);
+          print(uid);
+          print('result${response.data}');
+        }
         products = List<Products>.from(
           result.map((json) => Products.fromJson(json)),
         );
         products = products.reversed.toList();
-        printInfo(info: products.length.toString());
+        printInfo(info: 'Produk:${products.length}');
         update();
       }
     } catch (e) {
@@ -105,9 +112,8 @@ class StoreController extends GetxController {
 
   Future<String> uploadImage(File file) async {
     String fileName = file.path.split('/').last;
-    Reference ref = FirebaseStorage.instance
-        .ref()
-        .child('product_picture/$fileName');
+    Reference ref =
+        FirebaseStorage.instance.ref().child('product_picture/$fileName');
     UploadTask uploadTask = ref.putFile(file);
     TaskSnapshot snapshot = await uploadTask.whenComplete(() {});
     String downloadUrl = await snapshot.ref.getDownloadURL();

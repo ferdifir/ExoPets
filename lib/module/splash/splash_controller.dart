@@ -12,6 +12,7 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    print(_auth.currentUser!.uid);
     Future.delayed(const Duration(seconds: 3), () async {
       bool isLogin = _auth.currentUser != null;
       if (isLogin) {
@@ -29,10 +30,7 @@ class SplashController extends GetxController {
 
   Future<bool> isAdmin() async {
     final response = await _dio.get('/admins/admin/${_auth.currentUser!.uid}');
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
+    bool isAdm = response.data['data']['isAdmin'];
+    return isAdm;
   }
 }
