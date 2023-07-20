@@ -12,7 +12,6 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print(_auth.currentUser!.uid);
     Future.delayed(const Duration(seconds: 3), () async {
       bool isLogin = _auth.currentUser != null;
       if (isLogin) {
