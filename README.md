@@ -2,6 +2,8 @@
 
 Ini adalah proyek aplikasi Flutter mobile yang merupakan marketplace hewan peliharaan. Aplikasi ini memungkinkan pengguna untuk membeli dan menjual hewan peliharaan melalui platform yang aman dan terpercaya.
 
+<img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/1.jpg" alt="1" width="360" height="640" />
+
 ## Fitur Utama
 - Role User: Aplikasi ini memiliki tiga peran pengguna utama:
   - Buyer: Pengguna dapat menjelajahi daftar hewan peliharaan yang dijual, melakukan pembelian, dan melacak status pesanan mereka.
