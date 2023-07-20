@@ -2,13 +2,15 @@
 
 Ini adalah proyek aplikasi Flutter mobile yang merupakan marketplace hewan peliharaan. Aplikasi ini memungkinkan pengguna untuk membeli dan menjual hewan peliharaan melalui platform yang aman dan terpercaya.
 
-<img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/1.jpg" alt="1" width="300" height="534" />
-<img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/2.jpg" alt="2" width="300" height="534" />
-<img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/3.jpg" alt="3" width="300" height="534" />
-<img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/4.jpg" alt="4" width="300" height="534" />
-<img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/5.jpg" alt="5" width="300" height="534" />
-<img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/6.jpg" alt="6" width="300" height="534" />
-<img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/7.jpg" alt="7" width="300" height="534" />
+<div style="display: flex; flex-wrap: wrap;">
+  <img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/1.jpg" alt="1" width="300" height="534" />
+  <img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/2.jpg" alt="2" width="300" height="534" />
+  <img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/3.jpg" alt="3" width="300" height="534" />
+  <img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/4.jpg" alt="4" width="300" height="534" />
+  <img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/5.jpg" alt="5" width="300" height="534" />
+  <img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/6.jpg" alt="6" width="300" height="534" />
+  <img src="https://github.com/ferdifir/ExoPets/blob/main/screenshot/7.jpg" alt="7" width="300" height="534" />
+</div>
 
 ## Fitur Utama
 - Role User: Aplikasi ini memiliki tiga peran pengguna utama:
